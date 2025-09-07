@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Robot Math Game</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>Robot Island Math Game</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>🤖 Robot Math Game</h1>
+  <h1>🤖 Robot Island Math Game</h1>
 
   <div id="game">
     <div id="grid"></div>
+
     <div id="panel">
       <p id="question">Press Start to begin!</p>
-      <input type="number" id="answer" placeholder="Your answer">
+      <input type="text" id="answer" placeholder="Your answer">
       <button onclick="checkAnswer()">Check</button>
       <button onclick="startGame()">Start Game</button>
       <button onclick="resetGame()">Reset</button>
+      <p id="feedback"></p>
     </div>
   </div>
 
