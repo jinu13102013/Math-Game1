@@ -1,144 +1,132 @@
-body {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  background: #f2f2f2;
-  margin: 0;
-  padding: 0;
-}
+// Island grid: 0 = water, 1 = land, "S1"-"S4" = stations
+const islandGrid = [
+  [0, 1, 1, 1, 0],
+  [1, 1, 0, 1, 1],
+  [1, 0, "S1", 0, 1],
+  [1, 1, 0, "S2", 1],
+  [0, 1, "S3", 1, "S4"]
+];
 
-h1 {
-  margin-top: 20px;
-}
+// Robot starting position
+let robot = { x: 1, y: 0 };
+let currentStation = null;
+let stationIndex = 0;
 
-#game {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-  gap: 20px;
-}
+const stations = {
+  "S1": { q: "I am a number. Multiply me by 2 and add 3 to get 11. What am I?", a: 4 },
+  "S2": { q: "Divide me by 3 and subtract 2 to get 4. What am I?", a: 18 },
+  "S3": { q: "Next in the sequence: 2, 4, 8, 16, ?", a: 32 },
+  "S4": { q: "Add 7 to me to get 20. What am I?", a: 13 }
+};
 
-#grid {
-  display: grid;
-  grid-template-columns: repeat(5, 60px);
-  grid-template-rows: repeat(5, 60px);
-  gap: 2px;
-  padding: 5px;
-  border: 2px solid #222;
-  background: #222;
-}
+// Predefined path (robot moves through land and stations)
+const path = [
+  { x:1, y:0 }, { x:1, y:1 }, { x:2, y:1 }, { x:2, y:2 }, // S1
+  { x:3, y:2 }, { x:3, y:3 }, // S2
+  { x:2, y:4 }, // S3
+  { x:4, y:4 }  // S4
+];
 
-.cell {
-  width: 60px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  border: 1px solid #222;
-}
+let pathIndex = 0;
 
-.water {
-  background: #4da6ff; /* blue water */
-}
+const grid = document.getElementById("grid");
+const questionElem = document.getElementById("question");
+const answerInput = document.getElementById("answer");
+const feedback = document.getElementById("feedback");
 
-.land {
-  background: #66cc66; /* green land */
-}
-
-.station {
-  background: #ffcc33; /* yellow stations */
-}
-
-.robot {
-  font-size: 28px;
-}
-
-#panel {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
-  max-width: 250px;
-}
-
-#panel input {
-  width: 80%;
-  padding: 5px;
-  font-size: 16px;
-  margin: 5px 0;
-}
-
-#panel button {
-  margin: 5px;
-  padding: 5px 10px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-#feedback {
-  margin-top: 10px;
-  font-weight: bold;
-}
-
+// Draw island grid
+function drawGrid() {
+  grid.innerHTML = "";
+  for (let y = 0; y < islandGrid.length; y++) {
+    for (let x = 0; x < islandGrid[0].length; x++) {
       const cell = document.createElement("div");
       cell.className = "cell";
-      if (x === robot.x && y === robot.y) {
+      const value = islandGrid[y][x];
+      if (value === 0) cell.classList.add("water");
+      else if (typeof value === "number" || value === 1) cell.classList.add("land");
+      else if (typeof value === "string" && value.startsWith("S")) cell.classList.add("station");
+
+      if (robot.x === x && robot.y === y) {
         cell.innerHTML = "🤖";
+        cell.classList.add("robot");
       }
+
       grid.appendChild(cell);
     }
   }
 }
 
+// Start Game
 function startGame() {
-  robot = { x: 0, y: 0, dir: "E" };
-  currentStep = 0;
-  askQuestion();
+  robot = { x: 1, y: 0 };
+  pathIndex = 0;
+  stationIndex = 0;
+  currentStation = null;
+  feedback.innerText = "";
+  questionElem.innerText = "Robot started! Move to first station.";
   drawGrid();
+  moveAlongPath();
 }
 
+// Reset Game
 function resetGame() {
-  document.getElementById("question").innerText = "Press Start to begin!";
-  document.getElementById("answer").value = "";
-  robot = { x: 0, y: 0, dir: "E" };
+  robot = { x: 1, y: 0 };
+  pathIndex = 0;
+  stationIndex = 0;
+  currentStation = null;
+  questionElem.innerText = "Press Start to begin!";
+  feedback.innerText = "";
   drawGrid();
 }
 
-function askQuestion() {
-  let a = Math.floor(Math.random() * 10) + 1;
-  let b = Math.floor(Math.random() * 10) + 1;
-  currentAnswer = a + b;
-  document.getElementById("question").innerText = `What is ${a} + ${b}?`;
+// Ask station riddle
+function askRiddle(station) {
+  currentStation = stations[station];
+  questionElem.innerText = currentStation.q;
 }
 
+// Check answer
 function checkAnswer() {
-  const user = parseInt(document.getElementById("answer").value);
-  if (user === currentAnswer) {
-    moveRobot();
-    askQuestion();
+  if (!currentStation) return;
+
+  const user = parseInt(answerInput.value);
+  if (user === currentStation.a) {
+    feedback.innerText = "✅ Correct!";
+    currentStation = null;
+    answerInput.value = "";
+    moveAlongPath();
   } else {
-    alert("❌ Wrong! Try again.");
+    feedback.innerText = "❌ Wrong! Try again.";
   }
-  document.getElementById("answer").value = "";
 }
 
-function moveRobot() {
-  const action = moves[currentStep];
-  currentStep++;
-  if (!action) return;
-
-  if (action === "forward") {
-    if (robot.dir === "E") robot.x++;
-    else if (robot.dir === "W") robot.x--;
-    else if (robot.dir === "N") robot.y--;
-    else if (robot.dir === "S") robot.y++;
-  } else if (action === "left") {
-    robot.dir = { N: "W", W: "S", S: "E", E: "N" }[robot.dir];
-  } else if (action === "right") {
-    robot.dir = { N: "E", E: "S", S: "W", W: "N" }[robot.dir];
-  } else if (action === "stop") {
-    alert("🎉 Robot finished the course!");
+// Move robot along path
+function moveAlongPath() {
+  if (pathIndex >= path.length) {
+    questionElem.innerText = "🎉 Robot finished all stations!";
+    feedback.innerText = "";
+    return;
   }
+
+  const nextPos = path[pathIndex];
+  robot.x = nextPos.x;
+  robot.y = nextPos.y;
+  drawGrid();
+
+  const cellValue = islandGrid[robot.y][robot.x];
+  if (typeof cellValue === "string" && cellValue.startsWith("S")) {
+    askRiddle(cellValue);
+    stationIndex++;
+    pathIndex++;
+  } else {
+    pathIndex++;
+    setTimeout(moveAlongPath, 800); // move every 0.8s for animation
+  }
+}
+
+// Initial draw
+drawGrid();
+
 
   drawGrid();
 }
