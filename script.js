@@ -13,10 +13,10 @@ let currentStation = null;
 let stationIndex = 0;
 
 const stations = {
-  "S1": { q: "I am a number. Multiply me by 2 and add 3 to get 11. What am I?", a: 4 },
-  "S2": { q: "Divide me by 3 and subtract 2 to get 4. What am I?", a: 18 },
-  "S3": { q: "Next in the sequence: 2, 4, 8, 16, ?", a: 32 },
-  "S4": { q: "Add 7 to me to get 20. What am I?", a: 13 }
+  "S1": { q: "Station 1: I am a number. Multiply me by 2 and add 3 to get 11. Enter your answer as a number.", a: 4 },
+  "S2": { q: "Station 2: Divide me by 3 and subtract 2 to get 4. Enter your answer as a number.", a: 18 },
+  "S3": { q: "Station 3: Next in the sequence: 2, 4, 8, 16, ? Enter your answer as a number.", a: 32 },
+  "S4": { q: "Station 4: Add 7 to me to get 20. Enter your answer as a number.", a: 13 }
 };
 
 // Predefined path (robot moves through land and stations)
@@ -63,7 +63,7 @@ function startGame() {
   stationIndex = 0;
   currentStation = null;
   feedback.innerText = "";
-  questionElem.innerText = "Robot started! Move to first station.";
+  questionElem.innerText = "Robot started! Move to the first station.";
   drawGrid();
   moveAlongPath();
 }
@@ -76,6 +76,7 @@ function resetGame() {
   currentStation = null;
   questionElem.innerText = "Press Start to begin!";
   feedback.innerText = "";
+  answerInput.value = "";
   drawGrid();
 }
 
@@ -83,6 +84,7 @@ function resetGame() {
 function askRiddle(station) {
   currentStation = stations[station];
   questionElem.innerText = currentStation.q;
+  feedback.innerText = "";
 }
 
 // Check answer
@@ -90,13 +92,18 @@ function checkAnswer() {
   if (!currentStation) return;
 
   const user = parseInt(answerInput.value);
+  if (isNaN(user)) {
+    feedback.innerText = "⚠️ Please enter your answer as a number!";
+    return;
+  }
+
   if (user === currentStation.a) {
     feedback.innerText = "✅ Correct!";
     currentStation = null;
     answerInput.value = "";
     moveAlongPath();
   } else {
-    feedback.innerText = "❌ Wrong! Try again.";
+    feedback.innerText = "❌ Wrong! Try again. (Enter numbers only)";
   }
 }
 
@@ -125,10 +132,4 @@ function moveAlongPath() {
 }
 
 // Initial draw
-drawGrid();
-
-
-  drawGrid();
-}
-
 drawGrid();
