@@ -1,19 +1,85 @@
-const gridSize = 5;
-let robot = { x: 0, y: 0, dir: "E" }; // Start at top-left, facing East
-let currentStep = 0;
-let currentAnswer = 0;
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background: #f2f2f2;
+  margin: 0;
+  padding: 0;
+}
 
-const moves = [
-  "forward", "left", "forward", "left", "forward",
-  "right", "forward", "right", "forward", "stop"
-];
+h1 {
+  margin-top: 20px;
+}
 
-// Build grid
-const grid = document.getElementById("grid");
-function drawGrid() {
-  grid.innerHTML = "";
-  for (let y = 0; y < gridSize; y++) {
-    for (let x = 0; x < gridSize; x++) {
+#game {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 20px;
+}
+
+#grid {
+  display: grid;
+  grid-template-columns: repeat(5, 60px);
+  grid-template-rows: repeat(5, 60px);
+  gap: 2px;
+  padding: 5px;
+  border: 2px solid #222;
+  background: #222;
+}
+
+.cell {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  border: 1px solid #222;
+}
+
+.water {
+  background: #4da6ff; /* blue water */
+}
+
+.land {
+  background: #66cc66; /* green land */
+}
+
+.station {
+  background: #ffcc33; /* yellow stations */
+}
+
+.robot {
+  font-size: 28px;
+}
+
+#panel {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  max-width: 250px;
+}
+
+#panel input {
+  width: 80%;
+  padding: 5px;
+  font-size: 16px;
+  margin: 5px 0;
+}
+
+#panel button {
+  margin: 5px;
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+#feedback {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
       const cell = document.createElement("div");
       cell.className = "cell";
       if (x === robot.x && y === robot.y) {
