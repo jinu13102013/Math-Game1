@@ -7,12 +7,12 @@ const path = [
   { x: 500, y: 330 }   // Station 4
 ];
 
-// Station riddles (number answers only)
+// Harder riddles (number answers only)
 const stations = {
-  1: { q: "Station 1: Multiply 3 by 3.", a: 9 },
-  2: { q: "Station 2: What is 25 - 7?", a: 18 },
-  3: { q: "Station 3: Next in sequence: 5, 10, 20, ? ", a: 40 },
-  4: { q: "Station 4: Divide 81 by 9.", a: 9 }
+  1: { q: "Station 1: I am thinking of a number. If you multiply me by 3, then add 12, you get 75. What number am I?", a: 21 },
+  2: { q: "Station 2: The sum of three consecutive numbers is 72. What is the middle number?", a: 24 },
+  3: { q: "Station 3: A rectangle’s length is 4 more than twice its width. Its perimeter is 44. What is the width?", a: 6 },
+  4: { q: "Station 4: 3 apples + 2 bananas = 12, 2 apples + 3 bananas = 13. How many apples?", a: 2 }
 };
 
 let robot = document.getElementById("robot");
@@ -76,6 +76,14 @@ function checkAnswer() {
   if (user === stations[currentStation].a) {
     feedback.innerText = "✅ Correct!";
     feedback.className = "correct";
+
+    // Flash current station green
+    const stationElem = document.getElementById(`station${currentStation}`);
+    if (stationElem) {
+      stationElem.classList.add("correct-station");
+      setTimeout(() => stationElem.classList.remove("correct-station"), 800);
+    }
+
     answerInput.value = "";
     currentStation++;
     setTimeout(moveRobot, 1000);
@@ -84,3 +92,4 @@ function checkAnswer() {
     feedback.className = "wrong";
   }
 }
+
