@@ -2,23 +2,40 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Robot Island Math Game</title>
+  <title>Robot Island Adventure</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>🤖 Robot Island Math Game</h1>
+  <h1>🤖 Robot Island Adventure</h1>
 
-  <div id="game">
-    <div id="grid"></div>
+  <!-- Intro screen -->
+  <div id="intro">
+    <p>Guide the robot across the island by solving math riddles! 🌴</p>
+    <p>Type your answers in <b>numbers only</b>.</p>
+    <button onclick="startGame()">Start Game</button>
+  </div>
 
-    <div id="panel">
-      <p id="question">Press Start to begin!</p>
-      <input type="text" id="answer" placeholder="Your answer">
-      <button onclick="checkAnswer()">Check</button>
-      <button onclick="startGame()">Start Game</button>
-      <button onclick="resetGame()">Reset</button>
-      <p id="feedback"></p>
-    </div>
+  <!-- Game container -->
+  <div class="game-container hidden" id="game">
+    <img src="images/island-map.png" alt="Island Map" class="island-map">
+
+    <!-- Robot (emoji) -->
+    <div id="robot">🤖</div>
+
+    <!-- Station markers -->
+    <div class="station" id="station1"></div>
+    <div class="station" id="station2"></div>
+    <div class="station" id="station3"></div>
+    <div class="station" id="station4"></div>
+  </div>
+
+  <!-- HUD -->
+  <div id="hud" class="hidden">
+    <p id="progress">Station: 0/4</p>
+    <p id="question">Solve the riddle...</p>
+    <input type="text" id="answer" placeholder="Type number only">
+    <button onclick="checkAnswer()">Submit</button>
+    <p id="feedback"></p>
   </div>
 
   <script src="script.js"></script>
