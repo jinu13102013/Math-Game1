@@ -1,81 +1,114 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Trebuchet MS', sans-serif;
   text-align: center;
-  background: #f2f2f2;
+  background: linear-gradient(to bottom, #87ceeb, #e0f7fa);
   margin: 0;
-  padding: 0;
+  padding: 20px;
 }
 
 h1 {
-  margin-top: 20px;
+  margin-bottom: 15px;
+  color: #004d40;
 }
 
-#game {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-  gap: 20px;
+.hidden {
+  display: none;
 }
 
-#grid {
-  display: grid;
-  grid-template-columns: repeat(5, 60px);
-  grid-template-rows: repeat(5, 60px);
-  gap: 2px;
-  padding: 5px;
-  border: 2px solid #222;
-  background: #222;
+.game-container {
+  position: relative;
+  display: inline-block;
 }
 
-.cell {
-  width: 60px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  border: 1px solid #222;
+.island-map {
+  width: 600px;
+  border-radius: 20px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
 }
 
-.water {
-  background: #4da6ff; /* blue water */
-}
-
-.land {
-  background: #66cc66; /* green land */
-}
-
-.station {
-  background: #ffcc33; /* yellow stations */
-}
-
-.robot {
+/* Robot emoji */
+#robot {
+  position: absolute;
   font-size: 28px;
+  transition: all 1s ease;
+  transform: translate(-50%, -50%);
 }
 
-#panel {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
-  max-width: 250px;
+/* Bounce animation for robot */
+@keyframes bounce {
+  0%   { transform: translate(-50%, -50%) translateY(0); }
+  30%  { transform: translate(-50%, -50%) translateY(-15px); }
+  50%  { transform: translate(-50%, -50%) translateY(0); }
+  70%  { transform: translate(-50%, -50%) translateY(-7px); }
+  100% { transform: translate(-50%, -50%) translateY(0); }
 }
 
-#panel input {
-  width: 80%;
-  padding: 5px;
-  font-size: 16px;
-  margin: 5px 0;
+.bounce {
+  animation: bounce 0.6s ease;
 }
 
-#panel button {
-  margin: 5px;
-  padding: 5px 10px;
-  font-size: 14px;
+/* Station markers */
+.station {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: rgba(255, 255, 0, 0.7);
+  border-radius: 50%;
+  border: 2px solid #333;
+  transform: translate(-50%, -50%);
+  animation: pulse 2s infinite;
+}
+
+/* Pulse animation for stations */
+@keyframes pulse {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.2); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+#station1 { top: 140px; left: 200px; }
+#station2 { top: 200px; left: 300px; }
+#station3 { top: 260px; left: 420px; }
+#station4 { top: 330px; left: 500px; }
+
+#hud {
+  margin-top: 15px;
+}
+
+#answer {
+  padding: 6px;
+  font-size: 1em;
+  width: 150px;
+  text-align: center;
+}
+
+button {
+  margin-top: 8px;
+  padding: 8px 14px;
+  font-size: 1em;
+  border-radius: 8px;
+  border: none;
+  background: #00897b;
+  color: white;
   cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: #00695c;
 }
 
 #feedback {
   margin-top: 10px;
+  font-size: 1.2em;
+}
+
+.correct {
+  color: green;
+  font-weight: bold;
+}
+
+.wrong {
+  color: red;
   font-weight: bold;
 }
