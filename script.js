@@ -1,135 +1,86 @@
-// Island grid: 0 = water, 1 = land, "S1"-"S4" = stations
-const islandGrid = [
-  [0, 1, 1, 1, 0],
-  [1, 1, 0, 1, 1],
-  [1, 0, "S1", 0, 1],
-  [1, 1, 0, "S2", 1],
-  [0, 1, "S3", 1, "S4"]
+// Robot path positions (x,y in pixels relative to map)
+const path = [
+  { x: 50,  y: 80 },   // Start
+  { x: 200, y: 140 },  // Station 1
+  { x: 300, y: 200 },  // Station 2
+  { x: 420, y: 260 },  // Station 3
+  { x: 500, y: 330 }   // Station 4
 ];
 
-// Robot starting position
-let robot = { x: 1, y: 0 };
-let currentStation = null;
-let stationIndex = 0;
-
+// Station riddles (number answers only)
 const stations = {
-  "S1": { q: "Station 1: I am a number. Multiply me by 2 and add 3 to get 11. Enter your answer as a number.", a: 4 },
-  "S2": { q: "Station 2: Divide me by 3 and subtract 2 to get 4. Enter your answer as a number.", a: 18 },
-  "S3": { q: "Station 3: Next in the sequence: 2, 4, 8, 16, ? Enter your answer as a number.", a: 32 },
-  "S4": { q: "Station 4: Add 7 to me to get 20. Enter your answer as a number.", a: 13 }
+  1: { q: "Station 1: Multiply 3 by 3.", a: 9 },
+  2: { q: "Station 2: What is 25 - 7?", a: 18 },
+  3: { q: "Station 3: Next in sequence: 5, 10, 20, ? ", a: 40 },
+  4: { q: "Station 4: Divide 81 by 9.", a: 9 }
 };
 
-// Predefined path (robot moves through land and stations)
-const path = [
-  { x:1, y:0 }, { x:1, y:1 }, { x:2, y:1 }, { x:2, y:2 }, // S1
-  { x:3, y:2 }, { x:3, y:3 }, // S2
-  { x:2, y:4 }, // S3
-  { x:4, y:4 }  // S4
-];
+let robot = document.getElementById("robot");
+let questionElem = document.getElementById("question");
+let answerInput = document.getElementById("answer");
+let feedback = document.getElementById("feedback");
+let progressElem = document.getElementById("progress");
 
-let pathIndex = 0;
+let currentStation = 0;
 
-const grid = document.getElementById("grid");
-const questionElem = document.getElementById("question");
-const answerInput = document.getElementById("answer");
-const feedback = document.getElementById("feedback");
+// Start the game
+function startGame() {
+  document.getElementById("intro").classList.add("hidden");
+  document.getElementById("game").classList.remove("hidden");
+  document.getElementById("hud").classList.remove("hidden");
+  
+  currentStation = 0;
+  moveRobot();
+}
 
-// Draw island grid
-function drawGrid() {
-  grid.innerHTML = "";
-  for (let y = 0; y < islandGrid.length; y++) {
-    for (let x = 0; x < islandGrid[0].length; x++) {
-      const cell = document.createElement("div");
-      cell.className = "cell";
-      const value = islandGrid[y][x];
-      if (value === 0) cell.classList.add("water");
-      else if (typeof value === "number" || value === 1) cell.classList.add("land");
-      else if (typeof value === "string" && value.startsWith("S")) cell.classList.add("station");
+// Move robot to next station or along path
+function moveRobot() {
+  if (currentStation >= path.length) {
+    questionElem.innerText = "🎉 Congratulations! You finished the island!";
+    feedback.innerHTML = "🏆 Great job, explorer!";
+    return;
+  }
 
-      if (robot.x === x && robot.y === y) {
-        cell.innerHTML = "🤖";
-        cell.classList.add("robot");
-      }
+  // Move robot to new position
+  robot.style.left = path[currentStation].x + "px";
+  robot.style.top = path[currentStation].y + "px";
 
-      grid.appendChild(cell);
-    }
+  // Trigger bounce animation
+  robot.classList.remove("bounce");       // reset animation
+  void robot.offsetWidth;                 // force reflow
+  robot.classList.add("bounce");          // start bounce
+
+  // Check if current position is a station
+  if (stations[currentStation]) {
+    let st = stations[currentStation];
+    questionElem.innerText = st.q;
+    progressElem.innerText = `Station: ${currentStation}/4`;
+  } else {
+    progressElem.innerText = `Station: ${currentStation}/4`;
+    currentStation++;
+    setTimeout(moveRobot, 1000);
   }
 }
 
-// Start Game
-function startGame() {
-  robot = { x: 1, y: 0 };
-  pathIndex = 0;
-  stationIndex = 0;
-  currentStation = null;
-  feedback.innerText = "";
-  questionElem.innerText = "Robot started! Move to the first station.";
-  drawGrid();
-  moveAlongPath();
-}
-
-// Reset Game
-function resetGame() {
-  robot = { x: 1, y: 0 };
-  pathIndex = 0;
-  stationIndex = 0;
-  currentStation = null;
-  questionElem.innerText = "Press Start to begin!";
-  feedback.innerText = "";
-  answerInput.value = "";
-  drawGrid();
-}
-
-// Ask station riddle
-function askRiddle(station) {
-  currentStation = stations[station];
-  questionElem.innerText = currentStation.q;
-  feedback.innerText = "";
-}
-
-// Check answer
+// Check user answer
 function checkAnswer() {
-  if (!currentStation) return;
+  if (!stations[currentStation]) return;
 
   const user = parseInt(answerInput.value);
   if (isNaN(user)) {
-    feedback.innerText = "⚠️ Please enter your answer as a number!";
+    feedback.innerText = "⚠️ Enter numbers only!";
+    feedback.className = "wrong";
     return;
   }
 
-  if (user === currentStation.a) {
+  if (user === stations[currentStation].a) {
     feedback.innerText = "✅ Correct!";
-    currentStation = null;
+    feedback.className = "correct";
     answerInput.value = "";
-    moveAlongPath();
+    currentStation++;
+    setTimeout(moveRobot, 1000);
   } else {
-    feedback.innerText = "❌ Wrong! Try again. (Enter numbers only)";
+    feedback.innerText = "❌ Wrong! Try again.";
+    feedback.className = "wrong";
   }
 }
-
-// Move robot along path
-function moveAlongPath() {
-  if (pathIndex >= path.length) {
-    questionElem.innerText = "🎉 Robot finished all stations!";
-    feedback.innerText = "";
-    return;
-  }
-
-  const nextPos = path[pathIndex];
-  robot.x = nextPos.x;
-  robot.y = nextPos.y;
-  drawGrid();
-
-  const cellValue = islandGrid[robot.y][robot.x];
-  if (typeof cellValue === "string" && cellValue.startsWith("S")) {
-    askRiddle(cellValue);
-    stationIndex++;
-    pathIndex++;
-  } else {
-    pathIndex++;
-    setTimeout(moveAlongPath, 800); // move every 0.8s for animation
-  }
-}
-
-// Initial draw
-drawGrid();
