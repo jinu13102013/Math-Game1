@@ -1,14 +1,19 @@
 const stations = {
-  1: { q: "What is 2 + 3?", a: 5, difficulty: "easy" },
-  2: { q: "What is 7 - 4?", a: 3, difficulty: "easy" },
-  3: { q: "What is 5 + 6?", a: 11, difficulty: "easy" },
-  4: { q: "Multiply 2 × 3. What is it?", a: 6, difficulty: "medium" },
-  5: { q: "Divide 12 ÷ 4. Result?", a: 3, difficulty: "medium" },
-  6: { q: "Add 5 + 7 + 2. What’s the total?", a: 14, difficulty: "medium" },
-  7: { q: "Multiply 3 × 6. What is it?", a: 18, difficulty: "hard" },
-  8: { q: "What number is 15 ÷ 3 + 4?", a: 9, difficulty: "hard" },
-  9: { q: "I am thinking of a number. Multiply me by 2 then add 6 to get 20. What number am I?", a: 7, difficulty: "hard" },
-  10:{ q: "Three consecutive numbers add up to 30. What is the middle number?", a: 10, difficulty: "hard" }
+  // Easy → multiplication/division
+  1: { q: "What is 3 × 4?", a: 12, difficulty: "easy" },
+  2: { q: "What is 12 ÷ 3?", a: 4, difficulty: "easy" },
+  3: { q: "What is 5 × 6?", a: 30, difficulty: "easy" },
+
+  // Medium → math riddles
+  4: { q: "I am a number. Multiply me by 2 and add 5 to get 17. What number am I?", a: 6, difficulty: "medium" },
+  5: { q: "The sum of two consecutive numbers is 27. What is the larger number?", a: 14, difficulty: "medium" },
+  6: { q: "I am thinking of a number. Divide me by 3, then add 7 to get 16. What number am I?", a: 27, difficulty: "medium" },
+
+  // Hard → multi-step / trickier riddles
+  7: { q: "Three times a number minus 5 equals 16. What is the number?", a: 7, difficulty: "hard" },
+  8: { q: "I am a number. Multiply me by 3, then add 9, and get 48. What number am I?", a: 13, difficulty: "hard" },
+  9: { q: "A rectangle’s length is twice its width. Its perimeter is 36. What are the length and width?", a: [12,6], difficulty: "hard" },
+  10:{ q: "Three consecutive numbers add up to 36. What is the middle number?", a: 12, difficulty: "hard" }
 };
 
 let current = 1;
@@ -52,7 +57,7 @@ function showQuestion(n){
   const questionElem = document.getElementById("question");
   questionElem.innerText = stations[n].q;
 
-  // Set color based on difficulty
+  // Color based on difficulty
   if(stations[n].difficulty === "easy") questionElem.style.color = "green";
   else if(stations[n].difficulty === "medium") questionElem.style.color = "orange";
   else questionElem.style.color = "red";
@@ -91,16 +96,16 @@ function submitAnswer(){
 
 function giveHint(n){
   const hints = {
-    1:"2 + 3 = ?",
-    2:"7 - 4 = ?",
-    3:"5 + 6 = ?",
-    4:"2 × 3 = ?",
-    5:"12 ÷ 4 = ?",
-    6:"5 + 7 + 2 = ?",
-    7:"3 × 6 = ?",
-    8:"15 ÷ 3 + 4 = ?",
-    9:"(Answer ×2) + 6 = 20",
-    10:"Three consecutive numbers add up to 30"
+    1:"3 × 4 = ?",
+    2:"12 ÷ 3 = ?",
+    3:"5 × 6 = ?",
+    4:"(Answer ×2) + 5 = 17",
+    5:"Two consecutive numbers sum to 27. Larger number = ?",
+    6:"(Answer ÷3) + 7 = 16",
+    7:"3 × ? -5 =16",
+    8:"3 × ? +9 =48",
+    9:"Perimeter=2(L+W), L=2×W, solve for L & W",
+    10:"Three consecutive numbers sum to 36. Find the middle one"
   };
   return hints[n] || "No hint available.";
 }
