@@ -11,7 +11,14 @@
   <!-- Intro screen -->
   <div id="intro">
     <p>Welcome! Solve the math riddles before time runs out.</p>
-    <button onclick="startGame()">Start Game</button>
+    <label for="timerSelect">Choose Time Limit: </label>
+    <select id="timerSelect">
+      <option value="5">5 Minutes</option>
+      <option value="7" selected>7 Minutes</option>
+      <option value="10">10 Minutes</option>
+    </select>
+    <br><br>
+    <button type="button" id="startBtn">Start Game</button>
   </div>
 
   <!-- Game area -->
@@ -21,10 +28,14 @@
     <p id="question"></p>
     <input type="text" id="answer" placeholder="Type your answer in numbers">
     <br>
-    <button onclick="submitAnswer()">Submit</button>
+    <button type="button" id="submitBtn">Submit</button>
     <p id="feedback"></p>
   </div>
 
   <script src="script.js"></script>
+  <script>
+    document.getElementById("startBtn").addEventListener("click", startGame);
+    document.getElementById("submitBtn").addEventListener("click", submitAnswer);
+  </script>
 </body>
 </html>
