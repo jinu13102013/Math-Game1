@@ -14,9 +14,13 @@ const stations = {
 let current = 1;
 let attempts = 0;
 let timerInterval;
-let timeLeft = 7*60;
+let timeLeft = 7*60; // default 7 min
 
 function startGame(){
+  // Get selected timer
+  const selected = document.getElementById("timerSelect").value;
+  timeLeft = parseInt(selected) * 60;
+
   document.getElementById("intro").classList.add("hidden");
   document.getElementById("game").classList.remove("hidden");
   showQuestion(current);
