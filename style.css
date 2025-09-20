@@ -71,6 +71,29 @@ h1 {
 #station3 { top: 260px; left: 420px; }
 #station4 { top: 330px; left: 500px; }
 
+/* Flash green when station is correct */
+.correct-station {
+  background-color: #4caf50 !important;
+  animation: flash 0.8s ease;
+}
+
+@keyframes flash {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.4); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+/* Trees, rocks, river emojis */
+.tree, .rock, .river {
+  position: absolute;
+  font-size: 28px;
+  pointer-events: none; /* they don’t block clicks */
+}
+
+.river {
+  font-size: 24px;
+}
+
 #hud {
   margin-top: 15px;
 }
