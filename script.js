@@ -104,7 +104,7 @@ function giveHint(n){
     6:"(Answer ÷3) + 7 = 16",
     7:"3 × ? -5 =16",
     8:"3 × ? +9 =48",
-    9:"Perimeter=2(L+W), L=2×W, solve for L & W",
+    9:"Perimeter=2(L+W), L=2×W. Enter as length,width"
     10:"Three consecutive numbers sum to 36. Find the middle one"
   };
   return hints[n] || "No hint available.";
