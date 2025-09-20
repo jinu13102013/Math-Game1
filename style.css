@@ -140,3 +140,17 @@ button:hover {
   color: red;
   font-weight: bold;
 }
+
+/* Timer styling */
+#timer {
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #3e2723;
+  margin-bottom: 10px;
+}
+
+
+.wrong {
+  color: red;
+  font-weight: bold;
+}
