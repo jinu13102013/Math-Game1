@@ -2,55 +2,46 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Robot Island Adventure</title>
+  <title>Math Map</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>🤖 Robot Island Adventure</h1>
+  <h1>🗺️ Math Map 🧮</h1>
 
   <!-- Intro screen -->
   <div id="intro">
-    <p>Guide the robot across the island by solving math riddles! 🌴</p>
-    <p>Type your answers in <b>numbers only</b>.</p>
+    <p>Welcome to Math Map! Solve math riddles at each station to move your robot 🤖 across the map.</p>
     <button onclick="startGame()">Start Game</button>
   </div>
 
-  <!-- Game container -->
-  <div class="game-container hidden" id="game">
-    <img src="images/island-map.png" alt="Island Map" class="island-map">
+  <!-- Game area -->
+  <div id="game" class="hidden">
+    <div class="game-container">
+      <!-- Robot -->
+      <div id="robot">🤖</div>
 
-    <!-- Robot -->
-    <div id="robot">🤖</div>
+      <!-- 10 Stations -->
+      <div id="station1" class="station" style="top: 50px; left: 80px;"></div>
+      <div id="station2" class="station" style="top: 80px; left: 200px;"></div>
+      <div id="station3" class="station" style="top: 120px; left: 320px;"></div>
+      <div id="station4" class="station" style="top: 200px; left: 450px;"></div>
+      <div id="station5" class="station" style="top: 260px; left: 320px;"></div>
+      <div id="station6" class="station" style="top: 320px; left: 200px;"></div>
+      <div id="station7" class="station" style="top: 380px; left: 80px;"></div>
+      <div id="station8" class="station" style="top: 420px; left: 200px;"></div>
+      <div id="station9" class="station" style="top: 460px; left: 350px;"></div>
+      <div id="station10" class="station" style="top: 460px; left: 550px;"></div>
+    </div>
 
-    <!-- Stations -->
-    <div class="station" id="station1"></div>
-    <div class="station" id="station2"></div>
-    <div class="station" id="station3"></div>
-    <div class="station" id="station4"></div>
-    <div class="station" id="station5"></div>
-    <div class="station" id="station6"></div>
-    <div class="station" id="station7"></div>
-    <div class="station" id="station8"></div>
-    <div class="station" id="station9"></div>
-    <div class="station" id="station10"></div>
-
-    <!-- Trees, rocks, rivers -->
-    <div class="tree" style="top: 50px; left: 80px;">🌴</div>
-    <div class="tree" style="top: 180px; left: 150px;">🌴</div>
-    <div class="tree" style="top: 300px; left: 400px;">🌴</div>
-    <div class="rock" style="top: 220px; left: 350px;">🪨</div>
-    <div class="rock" style="top: 330px; left: 200px;">🪨</div>
-    <div class="river" style="top: 100px; left: 250px;">🌊🌊🌊🌊</div>
-    <div class="river" style="top: 250px; left: 100px;">🌊🌊🌊</div>
-  </div>
-
-  <!-- HUD -->
-  <div id="hud" class="hidden">
-    <p id="progress">Station: 0/10</p>
-    <p id="question">Solve the riddle...</p>
-    <input type="text" id="answer" placeholder="Type number only">
-    <button onclick="checkAnswer()">Submit</button>
-    <p id="feedback"></p>
+    <!-- HUD -->
+    <div id="hud">
+      <p id="progress">Station 1 of 10</p>
+      <p id="question"></p>
+      <input type="text" id="answer" placeholder="Type your answer here">
+      <br>
+      <button onclick="submitAnswer()">Submit</button>
+      <p id="feedback"></p>
+    </div>
   </div>
 
   <script src="script.js"></script>
