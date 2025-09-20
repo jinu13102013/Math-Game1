@@ -1,40 +1,45 @@
+/* Global body styling */
 body {
   font-family: 'Trebuchet MS', sans-serif;
   text-align: center;
-  background: linear-gradient(to bottom, #87ceeb, #e0f7fa);
   margin: 0;
   padding: 20px;
+  background: #f5e6c8; /* parchment-like color */
 }
 
 h1 {
   margin-bottom: 15px;
-  color: #004d40;
+  color: #3e2723;
+  text-shadow: 1px 1px #fff8dc;
+  font-size: 2.5em;
 }
 
 .hidden {
   display: none;
 }
 
+/* Game container (the Math Map board) */
 .game-container {
   position: relative;
   display: inline-block;
-}
-
-.island-map {
-  width: 600px;
+  border: 5px solid #5d4037;
   border-radius: 20px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  box-shadow: 0 0 20px rgba(0,0,0,0.4);
+  background-color: #fffde7; /* light parchment */
+  width: 700px;
+  height: 500px;
+  margin-top: 20px;
 }
 
 /* Robot emoji */
 #robot {
   position: absolute;
-  font-size: 28px;
+  font-size: 32px;
   transition: all 1s ease;
   transform: translate(-50%, -50%);
 }
 
-/* Bounce animation for robot */
+/* Bounce animation */
 @keyframes bounce {
   0%   { transform: translate(-50%, -50%) translateY(0); }
   30%  { transform: translate(-50%, -50%) translateY(-15px); }
@@ -50,30 +55,27 @@ h1 {
 /* Station markers */
 .station {
   position: absolute;
-  width: 30px;
-  height: 30px;
-  background: rgba(255, 255, 0, 0.7);
+  width: 34px;
+  height: 34px;
+  background: rgba(255, 215, 0, 0.8);
   border-radius: 50%;
-  border: 2px solid #333;
+  border: 2px solid #3e2723;
   transform: translate(-50%, -50%);
   animation: pulse 2s infinite;
+  box-shadow: 0 0 10px rgba(255,215,0,0.8);
 }
 
-/* Pulse animation for stations */
+/* Pulse animation */
 @keyframes pulse {
   0% { transform: translate(-50%, -50%) scale(1); }
-  50% { transform: translate(-50%, -50%) scale(1.2); }
+  50% { transform: translate(-50%, -50%) scale(1.3); }
   100% { transform: translate(-50%, -50%) scale(1); }
 }
 
-#station1 { top: 140px; left: 200px; }
-#station2 { top: 200px; left: 300px; }
-#station3 { top: 260px; left: 420px; }
-#station4 { top: 330px; left: 500px; }
-
-/* Flash green when station is correct */
+/* Flash green when solved */
 .correct-station {
   background-color: #4caf50 !important;
+  box-shadow: 0 0 15px #2e7d32 !important;
   animation: flash 0.8s ease;
 }
 
@@ -83,53 +85,62 @@ h1 {
   100% { transform: translate(-50%, -50%) scale(1); }
 }
 
-/* Trees, rocks, river emojis */
-.tree, .rock, .river {
-  position: absolute;
-  font-size: 28px;
-  pointer-events: none; /* they don’t block clicks */
-}
-
-.river {
-  font-size: 24px;
-}
-
+/* HUD and input */
 #hud {
   margin-top: 15px;
+  padding: 12px;
+  background: rgba(255,255,255,0.9);
+  border: 3px solid #5d4037;
+  border-radius: 12px;
+  display: inline-block;
+  width: 70%;
 }
 
 #answer {
   padding: 6px;
   font-size: 1em;
-  width: 150px;
+  width: 160px;
   text-align: center;
+  border: 2px solid #5d4037;
+  border-radius: 8px;
+  margin: 5px;
 }
 
+/* Buttons */
 button {
   margin-top: 8px;
-  padding: 8px 14px;
+  padding: 10px 16px;
   font-size: 1em;
-  border-radius: 8px;
+  border-radius: 10px;
   border: none;
-  background: #00897b;
+  background: #8d6e63;
   color: white;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background 0.3s, transform 0.2s;
 }
 
 button:hover {
-  background: #00695c;
+  background: #6d4c41;
+  transform: scale(1.05);
 }
 
+/* Feedback messages */
 #feedback {
   margin-top: 10px;
   font-size: 1.2em;
+  text-shadow: 1px 1px #fff8dc;
 }
 
 .correct {
   color: green;
   font-weight: bold;
 }
+
+.wrong {
+  color: red;
+  font-weight: bold;
+}
+
 
 .wrong {
   color: red;
