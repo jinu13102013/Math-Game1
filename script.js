@@ -15,81 +15,38 @@ const stations = {
 // Track progress
 let currentStation = 1;
 let attempts = 0;
+let timerInterval;
+let timeLeft = 7 * 60; // 7 minutes in seconds
 
 function startGame() {
   document.getElementById("intro").classList.add("hidden");
   document.getElementById("game").classList.remove("hidden");
+
   moveRobotToStation(currentStation);
   showQuestion(currentStation);
+  startTimer();
 }
 
-function moveRobotToStation(stationNum) {
-  const robot = document.getElementById("robot");
-  const station = document.getElementById("station" + stationNum);
+function startTimer() {
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerDisplay();
 
-  robot.style.left = station.style.left;
-  robot.style.top = station.style.top;
-
-  // bounce effect
-  robot.classList.add("bounce");
-  setTimeout(() => robot.classList.remove("bounce"), 600);
-}
-
-function showQuestion(stationNum) {
-  const q = stations[stationNum].q;
-  document.getElementById("question").innerText = q;
-  document.getElementById("progress").innerText = `Station ${stationNum} of ${Object.keys(stations).length}`;
-  document.getElementById("answer").value = "";
-  document.getElementById("feedback").innerText = "";
-  attempts = 0;
-}
-
-function submitAnswer() {
-  const userAnswer = parseInt(document.getElementById("answer").value.trim());
-  const correct = stations[currentStation].a;
-
-  attempts++;
-
-  // Handle multiple possible answers
-  const isCorrect = Array.isArray(correct) ? correct.includes(userAnswer) : userAnswer === correct;
-
-  if (isCorrect) {
-    document.getElementById("feedback").innerText = "✅ Correct!";
-    document.getElementById("feedback").className = "correct";
-    document.getElementById("station" + currentStation).classList.add("correct-station");
-
-    if (currentStation < Object.keys(stations).length) {
-      currentStation++;
-      setTimeout(() => {
-        moveRobotToStation(currentStation);
-        showQuestion(currentStation);
-      }, 1000);
-    } else {
-      document.getElementById("feedback").innerText = "🎉 You finished the Math Map!";
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      document.getElementById("feedback").innerText = "⏰ Time's up! Game over!";
+      document.getElementById("feedback").className = "wrong";
+      document.getElementById("answer").disabled = true;
     }
-  } else {
-    let feedback = "❌ Wrong! Try again.";
-    if (attempts >= 3) {
-      feedback += " 💡 Hint: " + giveHint(currentStation);
-    }
-    document.getElementById("feedback").innerText = feedback;
-    document.getElementById("feedback").className = "wrong";
-  }
+  }, 1000);
 }
 
-// Hints for each station
-function giveHint(stationNum) {
-  const hints = {
-    1: "Reverse: 75 - 12 = 63. Then divide by 3.",
-    2: "Divide 72 by 3 to get the middle number × 3.",
-    3: "Perimeter formula = 2(L+W).",
-    4: "Think: Half the number = 18.",
-    5: "Equation: Me + Sis = 48 and Me = 3×Sis.",
-    6: "It’s powers of 2.",
-    7: "Total spent = 15.",
-    8: "Think of common multiples of 3 and 5.",
-    9: "Work backwards: Add 10, then halve.",
-    10: "24 ÷ 6."
-  };
-  return hints[stationNum] || "No hint available.";
-}
+function updateTimerDisplay() {
+  const minutes = String(Math.floor(timeLeft / 60)).padStart(2, "0");
+  const seconds = String(timeLeft % 60).padStart(2, "0");
+  document.getElementById("timer").innerText = `Time Left: ${minutes}:${seconds}`;
+
+  // Flash red when <1 minute
+  if(timeLeft <= 60) {
+    document.getElementById("timer").style.color = "#d32f2f
