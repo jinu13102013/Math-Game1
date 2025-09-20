@@ -16,9 +16,11 @@ let attempts = 0;
 let timerInterval;
 let timeLeft = 7*60; // default 7 min
 
-document.getElementById("startBtn").addEventListener("click", startGame);
-document.getElementById("submitBtn").addEventListener("click", submitAnswer);
-document.getElementById("restartBtn").addEventListener("click", resetGame);
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("startBtn").addEventListener("click", startGame);
+  document.getElementById("submitBtn").addEventListener("click", submitAnswer);
+  document.getElementById("restartBtn").addEventListener("click", resetGame);
+});
 
 function startGame(){
   const selected = document.getElementById("timerSelect").value;
