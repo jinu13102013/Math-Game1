@@ -1,15 +1,10 @@
-const stations = {
-  // Easy → multiplication/division
+const stations = { 
   1: { q: "What is 3 × 4?", a: 12, difficulty: "easy" },
   2: { q: "What is 12 ÷ 3?", a: 4, difficulty: "easy" },
   3: { q: "What is 5 × 6?", a: 30, difficulty: "easy" },
-
-  // Medium → math riddles
   4: { q: "I am a number. Multiply me by 2 and add 5 to get 17. What number am I?", a: 6, difficulty: "medium" },
   5: { q: "The sum of two consecutive numbers is 27. What is the larger number?", a: 14, difficulty: "medium" },
   6: { q: "I am thinking of a number. Divide me by 3, then add 7 to get 16. What number am I?", a: 27, difficulty: "medium" },
-
-  // Hard → multi-step / trickier riddles
   7: { q: "Three times a number minus 5 equals 16. What is the number?", a: 7, difficulty: "hard" },
   8: { q: "I am a number. Multiply me by 3, then add 9, and get 48. What number am I?", a: 13, difficulty: "hard" },
   9: { q: "A rectangle’s length is twice its width. Its perimeter is 36. What are the length and width?", a: [12,6], difficulty: "hard" },
@@ -20,6 +15,10 @@ let current = 1;
 let attempts = 0;
 let timerInterval;
 let timeLeft = 7*60; // default 7 min
+
+document.getElementById("startBtn").addEventListener("click", startGame);
+document.getElementById("submitBtn").addEventListener("click", submitAnswer);
+document.getElementById("restartBtn").addEventListener("click", resetGame);
 
 function startGame(){
   const selected = document.getElementById("timerSelect").value;
@@ -41,6 +40,7 @@ function startTimer(){
       document.getElementById("feedback").innerText = "⏰ Time's up! Game over!";
       document.getElementById("feedback").className = "wrong";
       document.getElementById("answer").disabled = true;
+      document.getElementById("restartBtn").classList.remove("hidden");
     }
   },1000);
 }
@@ -57,7 +57,6 @@ function showQuestion(n){
   const questionElem = document.getElementById("question");
   questionElem.innerText = stations[n].q;
 
-  // Color based on difficulty
   if(stations[n].difficulty === "easy") questionElem.style.color = "green";
   else if(stations[n].difficulty === "medium") questionElem.style.color = "orange";
   else questionElem.style.color = "red";
@@ -85,6 +84,7 @@ function submitAnswer(){
     } else {
       clearInterval(timerInterval);
       document.getElementById("feedback").innerText = "🎉 You completed all riddles!";
+      document.getElementById("restartBtn").classList.remove("hidden");
     }
   } else {
     let fb="❌ Wrong! Try again.";
@@ -104,8 +104,19 @@ function giveHint(n){
     6:"(Answer ÷3) + 7 = 16",
     7:"3 × ? -5 =16",
     8:"3 × ? +9 =48",
-    9:"Perimeter=2(L+W), L=2×W. Enter as length,width"
+    9:"Perimeter=2(L+W), L=2×W. Enter as length,width",
     10:"Three consecutive numbers sum to 36. Find the middle one"
   };
   return hints[n] || "No hint available.";
+}
+
+function resetGame(){
+  clearInterval(timerInterval);
+  current = 1;
+  timeLeft = parseInt(document.getElementById("timerSelect").value) * 60;
+  document.getElementById("answer").disabled = false;
+  document.getElementById("game").classList.add("hidden");
+  document.getElementById("intro").classList.remove("hidden");
+  document.getElementById("feedback").innerText = "";
+  document.getElementById("restartBtn").classList.add("hidden");
 }
